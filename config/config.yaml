@@ -1,0 +1,20 @@
+app:
+  name: 'notes-service'
+  version: '1.0.0'
+
+http:
+  host: 'localhost'
+  port: 8080
+
+log:
+  level: 'local'
+
+sqlite:
+  file_path: './notes_service.db' # Путь к файлу базы данных SQLite
+
+jwt:
+  token_ttl: 120m
+  jwt_sign_key: 'joiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSI'
+
+hasher:
+  hasher_salt: 'Jc3N1ZXI'
