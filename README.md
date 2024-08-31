@@ -54,55 +54,55 @@ docker run -d -p 8080:8080 notes-keeper
 -d – запускает контейнер в фоновом режиме (detached mode).
 -p 8080:8080 – перенаправляет порт 8080 на хосте в порт 8080 внутри контейнера.
 notes-keeper – это имя Docker-образа, который был создан на предыдущем шаге.
-Проверка работы приложения
-Регистрация пользователя
+## Проверка работы приложения
+#### Регистрация пользователя
 Запрос:
-bash
-Копировать
+```sh
 curl -X POST http://localhost:8080/note-keeper/api/register \
 -H 'Content-Type: application/json' \
 -d '{"username":"my_username","password":"my_password"}'
-Ответ:
+```
+###### Ответ:
 При удачной регистрации будет возвращен код 200. Если пользователь уже существует, будет возвращена ошибка о том, что такой пользователь уже есть.
 
-Вход в систему
+#### Вход в систему
 Запрос:
-bash
-Копировать
+```sh
 curl -X POST http://localhost:8080/note-keeper/api/login \
 -H 'Content-Type: application/json' \
 -d '{"username":"my_username","password":"my_password"}'
-Ответ:
+```
+###### Ответ:
 При успешном входе будет возвращен код 200, и в куки файлы будет записан токен пользователя, который будет использоваться для дальнейшей работы с заметками.
 
-Получение ID пользователя
+#### Получение ID пользователя
 Запрос:
-bash
-Копировать
+```sh
 curl -X POST http://localhost:8080/note-keeper/api/get_user_id \
 -H 'Content-Type: application/json' \
 -d '{"username":"my_username","password":"my_password"}'
-Создание заметки
+```
+#### Создание заметки
 Запрос:
-bash
-Копировать
+```sh
 curl -b ./cookie -X POST http://localhost:8080/note-keeper/api/create \
 -H 'Content-Type: application/json' \
 -d '{"user_id":1,"text":"my_text"}'
-Ответ:
+```
+###### Ответ:
 При успешной записи заметки будет возвращен код 200. Если не удалось записать заметку, проверить текст на ошибки, или текст заметки был пустой - будет возвращена ошибка.
 
-Получение списка заметок
+#### Получение списка заметок
 Запрос:
-bash
-Копировать
+```sh
 curl -c ./cookie -X GET http://localhost:8080/note-keeper/api/notes
-Ответ:
+```
+###### Ответ:
 При успехе будет возвращен код 200 и JSON массив заметок:
-
+```sh
 json
-Копировать
+
 [
 {"Text":"my_text","Mistakes":null,"Id":1,"UserId":1}
 ]
-Копировать
+```
