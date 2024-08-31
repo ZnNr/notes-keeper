@@ -98,9 +98,9 @@ curl -b ./cookie -X POST http://localhost:8080/note-keeper/api/create \
 curl -c ./cookie -X GET http://localhost:8080/note-keeper/api/notes
 ```
 ###### Ответ:
-При успехе будет возвращен код 200 и JSON массив заметок:
+При успехе будет возвращен код 200 и JSON массив заметок похожий на этот:
 ```sh
-json
+
 
 [
 {"Text":"my_text","Mistakes":null,"Id":1,"UserId":1}
