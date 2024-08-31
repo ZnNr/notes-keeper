@@ -26,7 +26,7 @@ func (s *Server) Router() {
 		r.Route("/api", func(r chi.Router) {
 			r.Post("/register", s.handler.RegisterHandler)
 			r.Post("/login", s.handler.LoginHandler)
-
+			r.Post("/get_user_id", s.handler.GetUserIDHandler)
 			r.Group(func(r chi.Router) {
 
 				r.Use(JWTMiddleware(s.handler.services.Auth))

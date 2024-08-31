@@ -13,6 +13,7 @@ type Auth interface {
 	Login(ctx context.Context, username, password string) (string, error)
 	Register(ctx context.Context, username, password string) error
 	ParseToken(token string) (int, error)
+	GetUserID(ctx context.Context, username string, password string) (int, error)
 }
 
 type Note interface {

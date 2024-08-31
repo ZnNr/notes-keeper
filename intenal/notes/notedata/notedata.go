@@ -3,6 +3,7 @@ package notedata
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"github.com/ZnNr/notes-keeper.git/intenal/errors"
 	"github.com/ZnNr/notes-keeper.git/intenal/notes/notemodel"
 	_ "modernc.org/sqlite"
@@ -11,15 +12,6 @@ import (
 const (
 	driverName = "sqlite"
 
-	tableSchema = `
-CREATE TABLE notes (
-    id SERIAL,
-    user_id integer,
-    text varchar(10000),
-    mistakes JSONB,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-`
 	insertQuery = `
 INSERT INTO notes (user_id, text, mistakes) VALUES (?, ?, ?)
 `
@@ -86,11 +78,27 @@ func (r *NoteRepository) GetNotes(ctx context.Context, userId int) ([]notemodel.
 	var notes []notemodel.Note
 	for rows.Next() {
 		var note notemodel.Note
-		err := rows.Scan(&note.Id, &note.UserId, &note.Text, &note.Mistakes)
+		var mistakesBytes []byte // временная переменная для хранения JSON-данных
+
+		// Сканируем данные
+		err := rows.Scan(&note.Id, &note.UserId, &note.Text, &mistakesBytes)
 		if err != nil {
 			return nil, err
 		}
+
+		// Преобразуем JSON-данные в структуру Go
+		if len(mistakesBytes) > 0 {
+			err = json.Unmarshal(mistakesBytes, &note.Mistakes)
+			if err != nil {
+				return nil, err
+			}
+		}
+
 		notes = append(notes, note)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
 	}
 
 	return notes, nil

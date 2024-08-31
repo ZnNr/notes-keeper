@@ -1,18 +1,24 @@
-FROM golang:alpine as modules
-COPY go.mod go.sum /modules/
-WORKDIR /modules
+# Используем официальный образ Golang для базового образа
+FROM golang:1.22.2
+
+# Указываем рабочую директорию внутри контейнера
+WORKDIR /app
+
+# Копируем файлы go.mod и go.sum, чтобы кешировать зависимости
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Step 2: Builder
-FROM golang:alpine as builder
-COPY --from=modules /go/pkg /go/pkg
-WORKDIR /app
+# Копируем весь проект в контейнер
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /note-keeper
+COPY *.db ./
+COPY cmd/*.go ./
+# Сборка приложения
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o  /notes-keeper
 
-# Step 3: Final
-FROM scratch
-COPY --from=builder /app/config /config
-COPY --from=builder /bin/app /app
-CMD ["/app"]
+
+
+# Открываем порт
+EXPOSE 8080
+
+# Команда для запуска приложения
+CMD ["/notes-keeper"]

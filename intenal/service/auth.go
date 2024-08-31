@@ -88,6 +88,28 @@ func (s *AuthService) Register(ctx context.Context, username, password string) e
 	return nil
 }
 
+func (s *AuthService) GetUserID(ctx context.Context, username, password string) (int, error) {
+	const op = "service.Auth.GetUserID"
+	s.logger.With("op", op)
+
+	if username == "" {
+		s.logger.Error("username is required")
+		return 0, errors.ErrUsernameRequired
+	}
+	if password == "" {
+		s.logger.Error("password is required")
+		return 0, errors.ErrPasswordRequired
+	}
+
+	// Проверяем наличие пользователя и получаем его данные
+	user, err := s.repo.GetUser(ctx, username, s.generatePasswordHash(password))
+	if err != nil {
+		s.logger.Error("cannot get user", slog.String("username", username))
+		return 0, errors.ErrCannotGetUser
+	}
+	return user.Id, nil
+}
+
 func (s *AuthService) generateToken(user usermodel.User) (string, error) {
 	const op = "service.Auth.generateToken"
 	s.logger.With("op", op)

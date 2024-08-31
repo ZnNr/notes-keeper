@@ -17,7 +17,7 @@ func CreateTables(db *sql.DB) {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
         text TEXT NOT NULL,
-        mistakes BLOB,
+        mistakes TEXT,
         FOREIGN KEY(user_id) REFERENCES users(id)
     );`
 
