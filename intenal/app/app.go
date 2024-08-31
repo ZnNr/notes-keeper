@@ -7,7 +7,7 @@ import (
 	"github.com/ZnNr/notes-keeper.git/intenal/service"
 	"github.com/ZnNr/notes-keeper.git/intenal/spellcheck"
 	"github.com/ZnNr/notes-keeper.git/intenal/sqlite"
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"log/slog"
 	"os"
 )

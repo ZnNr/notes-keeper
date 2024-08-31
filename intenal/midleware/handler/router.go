@@ -22,8 +22,8 @@ func NewServer(handler *Handler, router *chi.Mux) *Server {
 func (s *Server) Router() {
 	s.router.Use(middleware.Logger)
 
-	s.router.Route("/api", func(r chi.Router) {
-		r.Route("/v1", func(r chi.Router) {
+	s.router.Route("/note-keeper", func(r chi.Router) {
+		r.Route("/api", func(r chi.Router) {
 			r.Post("/register", s.handler.RegisterHandler)
 			r.Post("/login", s.handler.LoginHandler)
 
